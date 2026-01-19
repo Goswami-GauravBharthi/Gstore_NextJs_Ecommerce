@@ -14,7 +14,7 @@ export const syncUserCreation = inngest.createFunction(
         image: data.image_url,
       },
     });
-  }
+  },
 );
 
 export const syncUserUpdataion = inngest.createFunction(
@@ -31,7 +31,7 @@ export const syncUserUpdataion = inngest.createFunction(
         image: data.image_url,
       },
     });
-  }
+  },
 );
 
 export const syncUserDeletion = inngest.createFunction(
@@ -42,5 +42,23 @@ export const syncUserDeletion = inngest.createFunction(
     await prisma.user.delete({
       where: { id: data.id },
     });
-  }
+  },
+);
+
+//Ingest function to delete coupon on expiry
+
+export const deleteCouponOnExpiry = inngest.createFunction(
+  { id: "delete-coupon-on-expiry" },
+  { event: "app/coupon.expired" },
+  async ({ event, step }) => {
+    const { data } = event;
+    const expiryDate = new Date(data.expires_at);
+    await step.sleepUntil("wait-for-expiry", expiryDate);
+
+    await step.run("delete-coupon", async () => {
+      await prisma.coupon.delete({
+        where: { code: data.code },
+      });
+    });
+  },
 );
