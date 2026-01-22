@@ -2,7 +2,7 @@
   <h1><img src="https://gstore-orcin/favicon.ico" width="20" height="20" alt="Gstore Favicon">
    GoCart</h1>
   <p>
-    An open-source multi-vendor e-commerce platform built with Next.js and Tailwind CSS.
+    An multi-vendor e-commerce platform built with Next.js and Tailwind CSS.
   </p>
 </div>
 
