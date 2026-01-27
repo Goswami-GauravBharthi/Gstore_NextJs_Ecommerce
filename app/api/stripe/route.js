@@ -6,6 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // stripe webhook to verify payment intent(status)=> if user through stripe make payment then this webhook will verify payment intent(status) , if payment is successful then change order status to isPaid=true and clear cart data from user , if payment is failed then delete order from database..
 export const POST = async (req) => {
   try {
+    console.log("Stripe webhook received");
     const body = await req.text();
 
     const sig = req.headers.get("stripe-signature");
@@ -23,7 +24,7 @@ export const POST = async (req) => {
 
       const { orderIds, userId, appId } = session.data[0].metadata;
 
-      if (appId !== "gstore") {
+      if (appId !== "Gstore") {
         return NextResponse.json(
           { received: true, error: "Invalid app id" },
           { status: 400 },
@@ -83,6 +84,7 @@ export const POST = async (req) => {
         console.log("Unhandled event type", event.type);
         break;
     }
+    console.log("Stripe webhook processed");
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {
