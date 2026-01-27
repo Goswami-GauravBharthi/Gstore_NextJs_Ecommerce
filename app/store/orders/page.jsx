@@ -2,8 +2,13 @@
 import { useEffect, useState } from "react"
 import Loading from "@/components/Loading"
 import { orderDummyData } from "@/assets/assets"
+import { useAuth } from "@clerk/nextjs"
+import toast from "react-hot-toast"
+import axios from "axios"
 
 export default function StoreOrders() {
+
+    const { getToken } = useAuth();
     const [orders, setOrders] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedOrder, setSelectedOrder] = useState(null)
@@ -11,17 +16,45 @@ export default function StoreOrders() {
 
 
     const fetchOrders = async () => {
-       setOrders(orderDummyData)
-       setLoading(false)
+        try {
+            const token = await getToken()
+            const { data } = await axios.get("/api/store/orders", {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setOrders(data)
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.response?.data?.error || error.message);
+        }
+        finally {
+            setLoading(false)
+        }
     }
 
     const updateOrderStatus = async (orderId, status) => {
-        // Logic to update the status of an order
 
+        try {
+            const token = await getToken()
+            const { data } = await axios.post(`/api/store/orders`, { orderId, status }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            setOrders(orders.map((order) => order.id === orderId ? { ...order, status } : order))
+            toast.success("Order status updated!")
+        } catch (error) {
+            console.log(error)
+            toast.error(error?.response?.data?.error || error.message);
+        }
 
     }
 
     const openModal = (order) => {
+
         setSelectedOrder(order)
         setIsModalOpen(true)
     }
@@ -40,7 +73,7 @@ export default function StoreOrders() {
     return (
         <>
             <h1 className="text-2xl text-slate-500 mb-5">Store <span className="text-slate-800 font-medium">Orders</span></h1>
-            {orders.length === 0 ? (
+            {orders?.length === 0 ? (
                 <p>No orders found</p>
             ) : (
                 <div className="overflow-x-auto max-w-4xl rounded-md shadow border border-gray-200">
@@ -53,7 +86,7 @@ export default function StoreOrders() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-100">
-                            {orders.map((order, index) => (
+                            {orders?.map((order, index) => (
                                 <tr
                                     key={order.id}
                                     className="hover:bg-gray-50 transition-colors duration-150 cursor-pointer"
@@ -120,12 +153,12 @@ export default function StoreOrders() {
                                 {selectedOrder.orderItems.map((item, i) => (
                                     <div key={i} className="flex items-center gap-4 border border-slate-100 shadow rounded p-2">
                                         <img
-                                            src={item.product.images?.[0].src || item.product.images?.[0]}
-                                            alt={item.product?.name}
+                                            src={item?.product?.images?.[0].src || item?.product?.images?.[0]}
+                                            alt={item?.product?.name}
                                             className="w-16 h-16 object-cover rounded"
                                         />
                                         <div className="flex-1">
-                                            <p className="text-slate-800">{item.product?.name}</p>
+                                            <p className="text-slate-800">{item?.product?.name}</p>
                                             <p>Qty: {item.quantity}</p>
                                             <p>Price: ${item.price}</p>
                                         </div>

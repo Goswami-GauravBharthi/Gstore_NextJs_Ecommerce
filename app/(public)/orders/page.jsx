@@ -2,19 +2,57 @@
 import PageTitle from "@/components/PageTitle"
 import { useEffect, useState } from "react";
 import OrderItem from "@/components/OrderItem";
-import { orderDummyData } from "@/assets/assets";
+import { useAuth, useUser } from "@clerk/nextjs";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import Loading from "@/components/Loading";
+
 
 export default function Orders() {
 
+    const { getToken } = useAuth();
+    const { user, isLoaded } = useUser();
+
     const [orders, setOrders] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const router = useRouter();
+
+
 
     useEffect(() => {
-        setOrders(orderDummyData)
-    }, []);
+
+        const fetchOrder = async () => {
+            try {
+
+                const token = await getToken();
+                const { data } = await axios.get("/api/orders", { headers: { Authorization: `Bearer ${token}` } })
+                setOrders(data.orders);
+
+                setIsLoading(false);
+            } catch (error) {
+                console.log(error);
+                toast.error(error?.response?.data?.error || error.message)
+            }
+        }
+        if (isLoaded) {
+            if (user) {
+                fetchOrder();
+            } else {
+                router.push("/");
+            }
+        }
+
+    }, [isLoaded, user, getToken, router]);
+
+    if (!isLoaded && isLoading) {
+        return <Loading />
+    }
 
     return (
         <div className="min-h-[70vh] mx-6">
-            {orders.length > 0 ? (
+            {orders?.length > 0 ? (
                 (
                     <div className="my-20 max-w-7xl mx-auto">
                         <PageTitle heading="My Orders" text={`Showing total ${orders.length} orders`} linkText={'Go to home'} />

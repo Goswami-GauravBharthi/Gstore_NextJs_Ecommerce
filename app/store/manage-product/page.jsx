@@ -4,8 +4,13 @@ import { toast } from "react-hot-toast"
 import Image from "next/image"
 import Loading from "@/components/Loading"
 import { productDummyData } from "@/assets/assets"
+import { useAuth, useUser } from "@clerk/nextjs"
+import axios from "axios"
 
 export default function StoreManageProducts() {
+
+    const { getToken } = useAuth();
+    const { user } = useUser();
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
 
@@ -13,19 +18,38 @@ export default function StoreManageProducts() {
     const [products, setProducts] = useState([])
 
     const fetchProducts = async () => {
-        setProducts(productDummyData)
-        setLoading(false)
+        try {
+            const token = await getToken();
+
+            const { data } = await axios.get("/api/store/product", { headers: { Authorization: `Bearer ${token}` } });
+            setProducts(data.products.sort((a, b) => b.createdAt - a.createdAt));
+            setLoading(false);
+        }
+        catch (error) {
+            console.log(error);
+            toast.error(error.response.data.error || error.message);
+        }
     }
 
     const toggleStock = async (productId) => {
-        // Logic to toggle the stock of a product
+        try {
+            const token = await getToken();
+            const { data } = await axios.post(`/api/store/stock-toggle`, { productId }, { headers: { Authorization: `Bearer ${token}` } });
 
-
+            setProducts(products.map((product) => product.id === productId ? { ...product, inStock: !product.inStock } : product));
+            toast.success(data.message);
+        }
+        catch (error) {
+            console.log(error);
+            toast.error(error.response.data.error || error.message);
+        }
     }
 
     useEffect(() => {
+        if (user) {
             fetchProducts()
-    }, [])
+        }
+    }, [user])
 
     if (loading) return <Loading />
 
@@ -48,12 +72,12 @@ export default function StoreManageProducts() {
                             <td className="px-4 py-3">
                                 <div className="flex gap-2 items-center">
                                     <Image width={40} height={40} className='p-1 shadow rounded cursor-pointer' src={product.images[0]} alt="" />
-                                    {product.name}
+                                    {product.name.slice(0, 18) + " ..."}
                                 </div>
                             </td>
                             <td className="px-4 py-3 max-w-md text-slate-600 hidden md:table-cell truncate">{product.description}</td>
-                            <td className="px-4 py-3 hidden md:table-cell">{currency} {product.mrp.toLocaleString()}</td>
-                            <td className="px-4 py-3">{currency} {product.price.toLocaleString()}</td>
+                            <td className="px-4 py-3 hidden md:table-cell">{currency}{product.mrp.toLocaleString()}</td>
+                            <td className="px-4 py-3">{currency}{product.price.toLocaleString()}</td>
                             <td className="px-4 py-3 text-center">
                                 <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
                                     <input type="checkbox" className="sr-only peer" onChange={() => toast.promise(toggleStock(product.id), { loading: "Updating data..." })} checked={product.inStock} />

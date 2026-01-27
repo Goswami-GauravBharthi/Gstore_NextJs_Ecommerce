@@ -1,13 +1,18 @@
 'use client'
 import { dummyStoreDashboardData } from "@/assets/assets"
 import Loading from "@/components/Loading"
+import { useAuth } from "@clerk/nextjs"
+import axios from "axios"
 import { CircleDollarSignIcon, ShoppingBasketIcon, StarIcon, TagsIcon } from "lucide-react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 export default function Dashboard() {
 
+
+    const { getToken } = useAuth();
     const currency = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL || '$'
 
     const router = useRouter()
@@ -24,12 +29,21 @@ export default function Dashboard() {
         { title: 'Total Products', value: dashboardData.totalProducts, icon: ShoppingBasketIcon },
         { title: 'Total Earnings', value: currency + dashboardData.totalEarnings, icon: CircleDollarSignIcon },
         { title: 'Total Orders', value: dashboardData.totalOrders, icon: TagsIcon },
-        { title: 'Total Ratings', value: dashboardData.ratings.length, icon: StarIcon },
+        { title: 'Total Ratings', value: dashboardData?.ratings?.length || 0, icon: StarIcon },
     ]
 
     const fetchDashboardData = async () => {
-        setDashboardData(dummyStoreDashboardData)
-        setLoading(false)
+        try {
+            const token = await getToken();
+            const { data } = await axios.get("/api/store/dashboard", { headers: { Authorization: `Bearer ${token}` } });
+
+            setDashboardData(data.dashboardData);
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.error || error.message);
+
+        }
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -60,7 +74,7 @@ export default function Dashboard() {
 
             <div className="mt-5">
                 {
-                    dashboardData.ratings.map((review, index) => (
+                    dashboardData?.ratings?.map((review, index) => (
                         <div key={index} className="flex max-sm:flex-col gap-5 sm:items-center justify-between py-6 border-b border-slate-200 text-sm text-slate-600 max-w-4xl">
                             <div>
                                 <div className="flex gap-3">

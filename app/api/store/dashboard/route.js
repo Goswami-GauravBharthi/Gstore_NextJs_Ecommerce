@@ -41,11 +41,11 @@ export const GET = async (req) => {
       totalRating: rating.length,
       totalProducts: products.length,
       totalOrders: orders.length,
-      totalEarning: Math.round(
+      totalEarnings: Math.round(
         orders.reduce((total, order) => total + order.total, 0),
       ),
     };
-    return NextResponse.json({ dashboardData });
+    return NextResponse.json({ dashboardData }, { status: 200 });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

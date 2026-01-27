@@ -8,7 +8,7 @@ export const GET = async (req) => {
     //Get store username from query params
 
     const { searchParams } = new URL(req.url);
-    const username = searchParams.get("username").toLocaleLowerCase();
+    const username = searchParams.get("username")?.toLocaleLowerCase();
 
     if (!username) {
       return NextResponse.json({ error: "Missing username" }, { status: 400 });
@@ -20,7 +20,7 @@ export const GET = async (req) => {
         username,
       },
       include: {
-        products: {
+        Product: {
           where: {
             inStock: true,
           },
