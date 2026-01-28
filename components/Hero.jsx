@@ -27,6 +27,9 @@ const Hero = () => {
                     className='relative flex-1 flex flex-col bg-surface rounded-3xl xl:min-h-100 group border border-secondary/10 overflow-hidden shadow-sm'
                 >
                     <div className='absolute inset-0 bg-gradient-to-br from-white/40 to-secondary/5 pointer-events-none'></div>
+
+
+                    {/* hero content */}
                     <div className='p-5 sm:p-16 relative z-10'>
                         <motion.div variants={fadeIn('down', 0.3)} className='inline-flex items-center gap-3 bg-white/60 backdrop-blur-sm text-primary pr-4 p-1 rounded-full text-xs sm:text-sm border border-secondary/20 shadow-sm w-fit'>
                             <span className='bg-primary px-3 py-1 max-sm:ml-1 rounded-full text-primary-foreground text-xs font-medium'>NEWS</span> Free Shipping on Orders Above ₹499! <ChevronRightIcon className='group-hover:ml-2 transition-all text-secondary' size={16} />
@@ -36,14 +39,23 @@ const Hero = () => {
                         </motion.h2>
                         <motion.div variants={fadeIn('up', 0.5)} className='text-text-muted text-sm font-medium mt-4 sm:mt-8'>
                             <p>Starts from</p>
-                            <p className='text-3xl text-primary font-serif'>{currency}4.90</p>
+                            <p className='text-3xl text-primary font-serif'>{currency}499</p>
                         </motion.div>
                         <motion.button variants={fadeIn('up', 0.6)} className='bg-primary text-primary-foreground text-sm py-3 px-8 sm:py-4 sm:px-10 mt-6 sm:mt-10 rounded-full hover:bg-primary/90 hover:scale-[1.02] active:scale-95 transition shadow-lg shadow-primary/10'>
                             Explore Collection
                         </motion.button>
                     </div>
-                    <motion.div variants={fadeIn('left', 0.6)} className="absolute bottom-0 right-0 h-full w-full pointer-events-none">
-                        <Image className='sm:absolute bottom-0 right-0 md:right-10 w-full sm:max-w-sm mix-blend-multiply opacity-90' src={assets.hero_model_img} alt="Hero Model" />
+
+                    {/* Hero image */}
+                    <motion.div
+                        variants={fadeIn('left', 0.6)}
+                        className="relative sm:absolute bottom-0 right-0 w-full sm:h-full pointer-events-none flex justify-center sm:justify-end z-20"
+                    >
+                        <Image
+                            className='w-full max-w-[280px] sm:max-w-sm md:right-10 mix-blend-multiply opacity-90 sm:absolute bottom-0'
+                            src={assets.hero_model_img}
+                            alt="Hero Model"
+                        />
                     </motion.div>
                 </motion.div>
 
