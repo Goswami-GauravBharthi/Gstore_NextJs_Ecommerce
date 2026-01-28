@@ -39,8 +39,8 @@ const Navbar = () => {
 
                     {/* Logo Section */}
                     <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="relative text-2xl sm:text-3xl font-bold text-primary tracking-tight group">
-                            <span className="text-secondary group-hover:text-primary transition-colors">g</span>store<span className="text-secondary">.</span>
+                        <Link href="/" className="relative text-2xl sm:text-3xl font-bold text-primary tracking-tight group select-none">
+                            <span className="text-secondary group-hover:text-primary transition-colors">G</span>store<span className="text-secondary">.</span>
                             <Protect plan={"plus"}>
                                 <span className="absolute -top-2 -right-6 bg-surface text-secondary text-[10px] font-bold px-2 py-0.5 rounded-full border border-secondary/20">
                                     PLUS

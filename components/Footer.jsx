@@ -53,7 +53,7 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-16 border-b border-secondary/10 text-text-muted">
                     <div>
                         <Link href="/" className="text-4xl font-semibold text-text-main">
-                            <span className="text-secondary">go</span>cart<span className="text-secondary text-5xl leading-0">.</span>
+                            <span className="text-secondary">G</span>store<span className="text-secondary text-5xl leading-0">.</span>
                         </Link>
                         <p className="max-w-[410px] mt-6 text-sm leading-relaxed text-text-muted">Welcome to Gstore, where functionality meets mindful design. Discover curated gadgets that enhance your lifestyle without clutter.</p>
                         <div className="flex items-center gap-3 mt-8">
