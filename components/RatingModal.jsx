@@ -30,8 +30,8 @@ const RatingModal = ({ ratingModal, setRatingModal }) => {
 
             const { data } = await axios.post('/api/rating', {
                 rating,
-                productId:ratingModal.productId,
-                orderId:ratingModal.orderId,
+                productId: ratingModal.productId,
+                orderId: ratingModal.orderId,
                 review,
             }, {
                 headers: {
@@ -47,29 +47,29 @@ const RatingModal = ({ ratingModal, setRatingModal }) => {
     }
 
     return (
-        <div className='fixed inset-0 z-120 flex items-center justify-center bg-black/10'>
-            <div className='bg-white p-8 rounded-lg shadow-lg w-96 relative'>
-                <button onClick={() => setRatingModal(null)} className='absolute top-3 right-3 text-gray-500 hover:text-gray-700'>
-                    <XIcon size={20} />
+        <div className='fixed inset-0 z-120 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4'>
+            <div className='bg-surface p-8 rounded-2xl shadow-xl w-full max-w-sm relative border border-secondary/10'>
+                <button onClick={() => setRatingModal(null)} className='absolute top-4 right-4 text-text-muted hover:text-text-main hover:rotate-90 transition duration-300'>
+                    <XIcon size={24} />
                 </button>
-                <h2 className='text-xl font-medium text-slate-600 mb-4'>Rate Product</h2>
-                <div className='flex items-center justify-center mb-4'>
+                <h2 className='text-2xl font-serif font-medium text-text-main mb-6 text-center'>Rate Product</h2>
+                <div className='flex items-center justify-center mb-6 gap-2'>
                     {Array.from({ length: 5 }, (_, i) => (
                         <Star
                             key={i}
-                            className={`size-8 cursor-pointer ${rating > i ? "text-green-400 fill-current" : "text-gray-300"}`}
+                            className={`size-9 cursor-pointer transition-colors ${rating > i ? "text-secondary fill-secondary" : "text-secondary/20 fill-secondary/10"}`}
                             onClick={() => setRating(i + 1)}
                         />
                     ))}
                 </div>
                 <textarea
-                    className='w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-400'
+                    className='w-full p-4 border border-secondary/20 rounded-xl mb-6 focus:outline-none focus:border-secondary bg-background text-text-main resize-none transition shadow-sm'
                     placeholder='Write your review (optional)'
                     rows='4'
                     value={review}
                     onChange={(e) => setReview(e.target.value)}
                 ></textarea>
-                <button onClick={e => toast.promise(handleSubmit(), { loading: 'Submitting...' })} className='w-full bg-green-500 text-white py-2 rounded-md hover:bg-green-600 transition'>
+                <button onClick={e => toast.promise(handleSubmit(), { loading: 'Submitting...' })} className='w-full bg-primary text-primary-foreground py-3.5 rounded-full hover:bg-primary/90 transition shadow-lg shadow-primary/20 font-medium active:scale-95'>
                     Submit Rating
                 </button>
             </div>

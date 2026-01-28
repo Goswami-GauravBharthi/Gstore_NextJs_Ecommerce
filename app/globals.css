@@ -1,19 +1,44 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #4A3728; /* Deep Espresso */
+  --color-primary-foreground: #FDFBF7;
+  
+  --color-secondary: #8D7B68; /* Latte/Clay */
+  --color-secondary-foreground: #FFFFFF;
+
+  --color-accent: #C8B6A6; /* Warm Beige */
+  --color-accent-foreground: #2C1810;
+
+  --color-background: #FDFBF7; /* Organic Cream */
+  --color-surface: #F4EFE6; /* Muted Stone/Oat */
+  
+  --color-text-main: #2C1810; /* Dark Roast */
+  --color-text-muted: #5D5650; /* Taupe */
+  
+  --color-success: #606C38; /* Olive Green */
+  --color-error: #BC4749; /* Rust Red */
+
+  --font-sans: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
 @layer components {
     @keyframes marqueeScroll {
-        0% {
-            transform: translateX(0%);
-        }
-        100% {
-            transform: translateX(-50%);
-        }
+        0% { transform: translateX(0%); }
+        100% { transform: translateX(-50%); }
+    }
+    
+    .glass-panel {
+        @apply bg-surface/80 backdrop-blur-md border border-white/20;
     }
 }
 
 @layer base {
+    body {
+        @apply bg-background text-text-main antialiased selection:bg-secondary selection:text-white;
+    }
     button {
-        cursor: pointer;
+        @apply cursor-pointer;
     }
 }
 

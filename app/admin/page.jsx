@@ -51,26 +51,28 @@ export default function AdminDashboard() {
     if (loading) return <Loading />
 
     return (
-        <div className="text-slate-500">
-            <h1 className="text-2xl">Admin <span className="text-slate-800 font-medium">Dashboard</span></h1>
+        <div className="text-text-muted">
+            <h1 className="text-3xl font-serif text-text-main">Admin <span className="text-primary font-medium">Dashboard</span></h1>
 
             {/* Cards */}
-            <div className="flex flex-wrap gap-5 my-10 mt-4">
+            <div className="flex flex-wrap gap-5 my-8 mt-6">
                 {
                     dashboardCardsData.map((card, index) => (
-                        <div key={index} className="flex items-center gap-10 border border-slate-200 p-3 px-6 rounded-lg">
-                            <div className="flex flex-col gap-3 text-xs">
-                                <p>{card.title}</p>
-                                <b className="text-2xl font-medium text-slate-700">{card.value}</b>
+                        <div key={index} className="flex items-center gap-8 border border-secondary/10 bg-white/40 p-5 px-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                            <div className="flex flex-col gap-2 text-sm">
+                                <p className="text-text-muted font-medium uppercase tracking-wide text-xs">{card.title}</p>
+                                <b className="text-3xl font-serif font-medium text-text-main">{card.value}</b>
                             </div>
-                            <card.icon size={50} className=" w-11 h-11 p-2.5 text-slate-400 bg-slate-100 rounded-full" />
+                            <card.icon size={50} className="w-12 h-12 p-3 text-secondary bg-secondary/10 rounded-full" />
                         </div>
                     ))
                 }
             </div>
 
             {/* Area Chart */}
-            <OrdersAreaChart allOrders={dashboardData.allOrders} />
+            <div className="bg-white/40 border border-secondary/10 rounded-2xl p-6 shadow-sm">
+                <OrdersAreaChart allOrders={dashboardData.allOrders} />
+            </div>
         </div>
     )
 }

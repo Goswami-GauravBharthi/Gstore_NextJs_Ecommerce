@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useUser, useClerk, UserButton, Protect } from "@clerk/nextjs";
+import { motion, AnimatePresence } from "framer-motion";
+import { fadeIn } from "@/lib/framermotionAnimation";
 
 const Navbar = () => {
 
@@ -26,16 +28,21 @@ const Navbar = () => {
     }
 
     return (
-        <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all">
+        <motion.nav
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+            className="sticky top-0 z-50 w-full glass-panel border-b border-secondary/20 transition-all"
+        >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
+                <div className="flex items-center justify-between h-20">
 
                     {/* Logo Section */}
                     <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="relative text-2xl sm:text-3xl font-bold text-slate-800 tracking-tight">
-                            <span className="text-green-600">g</span>store<span className="text-green-600">.</span>
+                        <Link href="/" className="relative text-2xl sm:text-3xl font-bold text-primary tracking-tight group">
+                            <span className="text-secondary group-hover:text-primary transition-colors">g</span>store<span className="text-secondary">.</span>
                             <Protect plan={"plus"}>
-                                <span className="absolute -top-2 -right-6 bg-green-100 text-green-600 text-[10px] font-bold px-2 py-0.5 rounded-full border border-green-200">
+                                <span className="absolute -top-2 -right-6 bg-surface text-secondary text-[10px] font-bold px-2 py-0.5 rounded-full border border-secondary/20">
                                     PLUS
                                 </span>
                             </Protect>
@@ -43,33 +50,35 @@ const Navbar = () => {
                     </div>
 
                     {/* Desktop Navigation (Hidden on Mobile) */}
-                    <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-600">
-                        <Link href="/" className="hover:text-green-600 transition-colors">Home</Link>
-                        <Link href="/shop" className="hover:text-green-600 transition-colors">Shop</Link>
-                        <Link href="/" className="hover:text-green-600 transition-colors">About</Link>
-                        <Link href="/" className="hover:text-green-600 transition-colors">Contact</Link>
+                    <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-text-muted">
+                        <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+                        <Link href="/shop" className="hover:text-primary transition-colors">Shop</Link>
                     </div>
 
                     {/* Desktop Search & Actions */}
                     <div className="hidden md:flex items-center gap-6">
                         <form onSubmit={handleSearch} className="relative hidden lg:block">
                             <input
-                                className="w-64 bg-slate-100 text-sm rounded-full pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-green-100 transition-all text-slate-700"
+                                className="w-64 bg-background/50 text-sm rounded-full pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-secondary/20 border border-transparent focus:border-secondary/30 transition-all text-text-main placeholder:text-text-muted/60"
                                 type="text"
                                 placeholder="Search products..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
                                 required
                             />
-                            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
                         </form>
 
-                        <Link href="/cart" className="relative text-slate-700 hover:text-green-600 transition-colors">
+                        <Link href="/cart" className="relative text-text-main hover:text-primary transition-colors">
                             <ShoppingCart size={22} />
                             {cartCount > 0 && (
-                                <span className="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full shadow-sm">
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full shadow-sm"
+                                >
                                     {cartCount}
-                                </span>
+                                </motion.span>
                             )}
                         </Link>
 
@@ -77,7 +86,7 @@ const Navbar = () => {
                             {!user ? (
                                 <button
                                     onClick={openSignIn}
-                                    className="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white text-sm font-medium rounded-full transition-all shadow-md">
+                                    className="px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground text-sm font-medium rounded-full transition-all shadow-md">
                                     Login
                                 </button>
                             ) : (
@@ -98,12 +107,16 @@ const Navbar = () => {
                     <div className="flex md:hidden items-center gap-3">
 
                         {/* 1. Mobile Cart */}
-                        <Link href="/cart" className="relative text-slate-700 p-1">
+                        <Link href="/cart" className="relative text-text-main p-1">
                             <ShoppingCart size={20} />
                             {cartCount > 0 && (
-                                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-[9px] font-bold w-3.5 h-3.5 flex items-center justify-center rounded-full">
+                                <motion.span
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-[9px] font-bold w-3.5 h-3.5 flex items-center justify-center rounded-full"
+                                >
                                     {cartCount}
-                                </span>
+                                </motion.span>
                             )}
                         </Link>
 
@@ -114,8 +127,7 @@ const Navbar = () => {
                             ) : (
                                 <button
                                     onClick={openSignIn}
-                                    className="flex items-center gap-1 px-3 py-1.5 bg-slate-900 text-white text-xs font-medium rounded-full">
-                                    {/* Show Icon on very small screens, text on larger phones if needed, or just text */}
+                                    className="flex items-center gap-1 px-4 py-1.5 bg-primary text-primary-foreground text-xs font-medium rounded-full">
                                     <span>Login</span>
                                 </button>
                             )}
@@ -124,41 +136,56 @@ const Navbar = () => {
                         {/* 3. Hamburger Menu */}
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="text-slate-700 focus:outline-none ml-1"
+                            className="text-text-main focus:outline-none ml-1"
                         >
-                            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            <motion.div
+                                key={isMobileMenuOpen ? "close" : "open"}
+                                initial={{ opacity: 0, rotate: -90 }}
+                                animate={{ opacity: 1, rotate: 0 }}
+                                transition={{ duration: 0.2 }}
+                            >
+                                {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            </motion.div>
                         </button>
                     </div>
                 </div>
             </div>
 
             {/* Mobile Menu Dropdown */}
-            {isMobileMenuOpen && (
-                <div className="md:hidden bg-white border-t border-gray-100 shadow-xl absolute w-full left-0 top-16 px-4 py-6 flex flex-col gap-4 z-40 animate-in slide-in-from-top-2">
+            <AnimatePresence>
+                {isMobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="md:hidden bg-surface border-t border-secondary/10 shadow-xl overflow-hidden"
+                    >
+                        <div className="px-6 py-8 flex flex-col gap-6">
+                            {/* Mobile Search */}
+                            <form onSubmit={handleSearch} className="relative w-full">
+                                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+                                <input
+                                    className="w-full bg-background border border-secondary/10 text-sm rounded-lg pl-10 pr-4 py-3 outline-none focus:border-secondary transition-all text-text-main"
+                                    type="text"
+                                    placeholder="Search products..."
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    required
+                                />
+                            </form>
 
-                    {/* Mobile Search */}
-                    <form onSubmit={handleSearch} className="relative w-full">
-                        <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                        <input
-                            className="w-full bg-slate-50 border border-slate-200 text-sm rounded-lg pl-10 pr-4 py-2.5 outline-none focus:border-green-500 transition-all"
-                            type="text"
-                            placeholder="Search products..."
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            required
-                        />
-                    </form>
-
-                    {/* Mobile Links */}
-                    <div className="flex flex-col space-y-2 text-base font-medium text-slate-700">
-                        <Link href="/" className="py-2 border-b border-gray-50 hover:text-green-600" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-                        <Link href="/shop" className="py-2 border-b border-gray-50 hover:text-green-600" onClick={() => setIsMobileMenuOpen(false)}>Shop</Link>
-                        <Link href="/" className="py-2 border-b border-gray-50 hover:text-green-600" onClick={() => setIsMobileMenuOpen(false)}>About</Link>
-                        <Link href="/" className="py-2 border-b border-gray-50 hover:text-green-600" onClick={() => setIsMobileMenuOpen(false)}>Contact</Link>
-                    </div>
-                </div>
-            )}
-        </nav>
+                            {/* Mobile Links */}
+                            <div className="flex flex-col space-y-4 text-base font-medium text-text-main">
+                                <Link href="/" className="py-2 border-b border-secondary/10 hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+                                <Link href="/shop" className="py-2 border-b border-secondary/10 hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>Shop</Link>
+                                <Link href="/orders" className="py-2 border-b border-secondary/10 hover:text-primary" onClick={() => setIsMobileMenuOpen(false)}>Orders</Link>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </motion.nav>
     )
 }
 

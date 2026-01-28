@@ -39,19 +39,19 @@ const AdminLayout = ({ children }) => {
     return loading ? (
         <Loading />
     ) : isAdmin ? (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen bg-background text-text-main">
             <AdminNavbar />
             <div className="flex flex-1 items-start h-full overflow-y-scroll no-scrollbar">
                 <AdminSidebar />
-                <div className="flex-1 h-full p-5 lg:pl-12 lg:pt-12 overflow-y-scroll">
+                <div className="flex-1 h-full p-5 lg:pl-12 lg:pt-12 overflow-y-scroll bg-surface/30">
                     {children}
                 </div>
             </div>
         </div>
     ) : (
-        <div className="min-h-screen flex flex-col items-center justify-center text-center px-6">
-            <h1 className="text-2xl sm:text-4xl font-semibold text-slate-400">You are not authorized to access this page</h1>
-            <Link href="/" className="bg-slate-700 text-white flex items-center gap-2 mt-8 p-2 px-6 max-sm:text-sm rounded-full">
+        <div className="min-h-screen flex flex-col items-center justify-center text-center px-6 bg-background">
+            <h1 className="text-2xl sm:text-4xl font-semibold text-text-muted font-serif">You are not authorized to access this page</h1>
+            <Link href="/" className="bg-primary text-primary-foreground flex items-center gap-2 mt-8 p-3 px-8 max-sm:text-sm rounded-full hover:bg-primary/90 transition shadow-lg shadow-primary/20">
                 Go to home <ArrowRightIcon size={18} />
             </Link>
         </div>

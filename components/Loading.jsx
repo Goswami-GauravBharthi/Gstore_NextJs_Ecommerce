@@ -3,8 +3,8 @@
 const Loading = () => {
 
     return (
-        <div className='flex items-center justify-center h-screen'>
-            <div className='w-11 h-11 rounded-full border-3 border-gray-300 border-t-green-500 animate-spin'></div>
+        <div className='flex items-center justify-center h-screen bg-background'>
+            <div className='w-11 h-11 rounded-full border-3 border-secondary/20 border-t-primary animate-spin text-primary'></div>
         </div>
     )
 }
