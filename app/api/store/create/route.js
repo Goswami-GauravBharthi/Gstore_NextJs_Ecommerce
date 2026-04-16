@@ -1,12 +1,12 @@
 import imagekit from "@/config/imagekit";
 import prisma from "@/lib/prisma";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
     }
@@ -120,7 +120,7 @@ export async function POST(req) {
 
 export const GET = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
 
     const store = await prisma.store.findFirst({
       where: {

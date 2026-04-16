@@ -1,13 +1,13 @@
 import { inngest } from "@/inngest/client";
 import prisma from "@/lib/prisma";
 import authAdmin from "@/middlewares/authAdmin";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 // Add new coupon
 export const POST = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
     const isAdmin = await authAdmin(userId);
     if (!isAdmin) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -40,7 +40,7 @@ export const POST = async (req) => {
 // Delete coupon  /api/admin/coupon?id=couponId
 export const DELETE = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
     const isAdmin = await authAdmin(userId);
     if (!isAdmin) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
@@ -63,7 +63,7 @@ export const DELETE = async (req) => {
 // get all coupons
 export const GET = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
     console.log(userId);
     const isAdmin = await authAdmin(userId);
     if (!isAdmin) {

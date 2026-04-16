@@ -1,11 +1,11 @@
 import prisma from "@/lib/prisma";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 // Add new rating
 export const POST = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
 
     const { orderId, productId, rating, review } = await req.json();
 
@@ -63,7 +63,7 @@ export const POST = async (req) => {
 // Get all ratings for a product
 export const GET = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

@@ -1,11 +1,11 @@
 import authAdmin from "@/middlewares/authAdmin";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 // auth admin
 export const GET = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
 
     const isAdmin = await authAdmin(userId);
     if (!isAdmin) {

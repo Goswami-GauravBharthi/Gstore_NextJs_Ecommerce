@@ -1,12 +1,12 @@
 import prisma from "@/lib/prisma";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 //Verify coupon
 
 export const POST = async (req) => {
   try {
-    const { userId, has } = getAuth(req);
+    const { userId, has } = await auth();
 
     const { code } = await req.json();
 

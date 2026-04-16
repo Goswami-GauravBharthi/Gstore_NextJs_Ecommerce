@@ -1,6 +1,6 @@
 import { openai } from "@/config/openai";
 import authSeller from "@/middlewares/authseller";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 const main = async (base64Image, mimeType) => {
@@ -56,7 +56,7 @@ const main = async (base64Image, mimeType) => {
 
 export const POST = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
     const isSeller = await authSeller(userId);
 
     if (!isSeller) {

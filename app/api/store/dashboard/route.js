@@ -1,4 +1,4 @@
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 import authSeller from "@/middlewares/authseller";
 import { NextResponse } from "next/server";
@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 // Get Dashboard Data for seller (total products,total orders,total earing)
 export const GET = async (req) => {
   try {
-    const { userId } = getAuth(req);
+    const { userId } = await auth();
     const storeId = await authSeller(userId);
     if (!storeId) {
       return NextResponse.json({ error: "unauthorized" }, { status: 401 });
